@@ -22,12 +22,23 @@
   visibility: hidden;
 }
 
-.Blue {
+.LtBlue {
   background-color: LightSkyBlue;
+}
+.Blue {
+  background-color: Blue;
 }
 
 .Red {
-  background-color: LightCoral;
+  background-color: red;
+}
+
+.Green{
+  background-color: green;
+}
+
+.Yellow{
+  background-color: yellow;
 }
 
 .BlueX {
