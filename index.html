@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="img/favicon.ico">
+  <style>
+    body {
+      background-image: url(./img/bush.png);
+    }
+  </style>
+</head>
+
+<body onload="pageLoad()">
+  <p class="header">Pachisi</p>
+  <div style='width:100%; text-align:center;'>
+    <a href="https://en.wikipedia.org/wiki/Pachisi" target="_blank">info and rules</a></div>
+  <table>
+    <table cellspacing="0">
+      <tr>
+        <td id="Red" rowspan="8" align="center" valign="center">
+          <table>
+            <tr>
+              <td><img id="s1" class="shell" src="img/Shell_Up.png" /></td>
+              <td><img id="s2" class="shell" src="img/Shell_Up.png" /></td>
+              <td><img id="s3" class="shell" src="img/Shell_Up.png" /></td>
+            </tr>
+            <tr>
+              <td><img id="s4" class="shell" src="img/Shell_Down.png" /></td>
+              <td><img id="s5" class="shell" src="img/Shell_Down.png" /></td>
+              <td><img id="s6" class="shell" src="img/Shell_Down.png" /></td>
+            </tr>
+            <tr>
+              <td colspan="3"><br>Value: <input type="text" id="value" style="width: 35px" readonly></td>
+            </tr>
+            <tr>
+              <td id="Red" colspan="3" align="center" valign="center"><button id="throw">Throw</button><br><br></td>
+            </tr>
+      </tr>
+
+    </table>
+    <!--
+      <button id="btnRed" background-"/img/bush.png">  </button>
+      <td><button id="77" class="grid"><img src="img/greenSquare.png" id="i77" /></button></td>
+
+      <td id="Red" colspan="8" rowspan="8" align="center" valign="center"><img src="img/StartRed.png" /></td>
+    -->
+    <td id="Red" colspan="8" rowspan="8" align="center" valign="center"><img src="img/RedStart4.png" /></td>
+    <td><button id="08" class="grid Blue"><img src="img/playingPieceYellow.png" id="i08" /></button></td>
+    <td><button id="09" class="grid Red"><img src="img/playingPieceRed.png" id="i09" /></button></td>
+    <td><button id="0A" class="grid Blue"><img src="img/playingPieceGreen.png" id="i0A" /></button></td>
+    <td id="Blue" colspan="8" rowspan="8" align="center" valign="center"><img src="img/BlueStart3.png" /></td>
+    </tr>
+    <tr>
+      <td><button id="18" class="grid Blue"><img src="img/playingPieceBlue.png" id="i18" /></button></td>
+      <td><button id="19" class="grid Red"></button></td>
+      <td><button id="1A" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="28" class="grid Blue"></button></td>
+      <td><button id="29" class="grid Red"></button></td>
+      <td><button id="2A" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="38" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="39" class="grid Red"></button></td>
+      <td><button id="3A" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+    </tr>
+    <tr>
+      <td><button id="48" class="grid Blue"></button></td>
+      <td><button id="49" class="grid RedX"><img src="img/xSpotRed.png" /></button></td>
+      <td><button id="48" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="58" class="grid Blue"></button></td>
+      <td><button id="59" class="grid Red"></button></td>
+      <td><button id="5A" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="68" class="grid Blue"></button></td>
+      <td><button id="69" class="grid Red"></button></td>
+      <td><button id="6A" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="78" class="grid Blue"></button></td>
+      <td><button id="79" class="grid Red"></button></td>
+      <td><button id="7A" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><button id="80" class="grid Blue"></button></td>
+      <td><button id="81" class="grid Blue"></button></td>
+      <td><button id="82" class="grid Blue"></button></td>
+      <td><button id="83" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="84" class="grid Blue"></button></td>
+      <td><button id="85" class="grid Blue"></button></td>
+      <td><button id="86" class="grid Blue"></button></td>
+      <td><button id="87" class="grid Blue"></button></td>
+      <td ID="Home" colspan="3" rowspan="3" align="center" valign="center"><strong>HOME</strong></td>
+      <td><button id="8B" class="grid Blue"></button></td>
+      <td><button id="8C" class="grid Blue"></button></td>
+      <td><button id="8D" class="grid Blue"></button></td>
+      <td><button id="8E" class="grid Blue"></button></td>
+      <td><button id="8F" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="8G" class="grid Blue"></button></td>
+      <td><button id="8H" class="grid Blue"></button></td>
+      <td><button id="8I" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><button id="90" class="grid Red"></button></td>
+      <td><button id="91" class="grid Red"></button></td>
+      <td><button id="92" class="grid Red"></button></td>
+      <td><button id="93" class="grid Red"></button></td>
+      <td><button id="94" class="grid RedX"><img src="img/xSpotRed.png" /></button></td>
+      <td><button id="95" class="grid Red"></button></td>
+      <td><button id="96" class="grid Red"></button></td>
+      <td><button id="97" class="grid Red"></button></td>
+      <td><button id="9B" class="grid Red"></button></td>
+      <td><button id="9C" class="grid Red"></button></td>
+      <td><button id="9D" class="grid Red"></button></td>
+      <td><button id="9E" class="grid RedX"><img src="img/xSpotRed.png" /></button></td>
+      <td><button id="9F" class="grid Red"></button></td>
+      <td><button id="9G" class="grid Red"></button></td>
+      <td><button id="9H" class="grid Red"></button></td>
+      <td><button id="9I" class="grid Red"></button></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><button id="A0" class="grid Blue"></button></td>
+      <td><button id="A1" class="grid Blue"></button></td>
+      <td><button id="A2" class="grid Blue"></button></td>
+      <td><button id="A3" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="A4" class="grid Blue"></button></td>
+      <td><button id="A5" class="grid Blue"></button></td>
+      <td><button id="A6" class="grid Blue"></button></td>
+      <td><button id="A7" class="grid Blue"></button></td>
+      <td><button id="AB" class="grid Blue"></button></td>
+      <td><button id="AC" class="grid Blue"></button></td>
+      <td><button id="AD" class="grid Blue"></button></td>
+      <td><button id="AE" class="grid Blue"></button></td>
+      <td><button id="AF" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="AG" class="grid Blue"></button></td>
+      <td><button id="AH" class="grid Blue"></button></td>
+      <td><button id="AI" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td id="Green" colspan="8" rowspan="8" align="center" valign="center"><img src="img/GreenStart2.png" /></td>
+      <td><button id="B8" class="grid Blue"></button></td>
+      <td><button id="B9" class="grid Red"></button></td>
+      <td><button id="BA" class="grid Blue"></button></td>
+      <td id="Yellow" colspan="8" rowspan="8" align="center" valign="center"><img src="img/YellowStart1.png" /></td>
+    </tr>
+    <tr>
+      <td><button id="C8" class="grid Blue"></button></td>
+      <td><button id="C9" class="grid Red"></button></td>
+      <td><button id="CA" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="D8" class="grid Blue"></button></td>
+      <td><button id="D9" class="grid Red"></button></td>
+      <td><button id="DA" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="E8" class="grid Blue"></button></td>
+      <td><button id="E9" class="grid RedX"><img src="img/xSpotRed.png" /></button></td>
+      <td><button id="EA" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="F8" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+      <td><button id="F9" class="grid Red"></button></td>
+      <td><button id="FA" class="grid BlueX"><img src="img/xSpotBlue.png" /></button></td>
+    </tr>
+    <tr>
+      <td><button id="G8" class="grid Blue"></button></td>
+      <td><button id="G9" class="grid Red"></button></td>
+      <td><button id="GA" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="H8" class="grid Blue"></button></td>
+      <td><button id="H9" class="grid Red"></button></td>
+      <td><button id="HA" class="grid Blue"></button></td>
+    </tr>
+    <tr>
+      <td><button id="I8" class="grid Blue"></button></td>
+      <td><button id="I9" class="grid Red"></button></td>
+      <td><button id="IA" class="grid Blue"></button></td>
+    </tr>
+  </table>
+  </td>
+  </table>
+  <table>
+    <tr>
+      <td><button id="playagain" class="button" onclick="Reset()" value="Play Again">Reset</button></td>
+      <td>
+        <p align="right">Turn:</p>
+      </td>
+      <td>
+        <div id="turnbox" class=cube style="background-color: black ; padding: 10px; border: 1px solid black;"></div>
+      </td>
+      <!--<td><button id="Undo" class="button" onclick="Undo()" value="Play Again" >Undo</button></td> -->
+    </tr>
+  </table>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="test.js"></script>
+  <script src="game.js"></script>
+</body>
+
+</html>
