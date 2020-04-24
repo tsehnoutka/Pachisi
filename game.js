@@ -2,22 +2,34 @@
 
 
 //  Variables
-const PLAYER1 = 0;
-const PLAYER2 = 1;
-const PLAYER1_COLOR = "black";
-const PLAYER2_COLOR = "white";
-const PLAYER1_FILE = "img/pieceDark.png";
-const PLAYER2_FILE = "img/pieceLight.png";
+const PLAYER_RED  = 0;
+const PLAYER_BLUE = 1;
+const PLAYER_GREEN = 2;
+const PLAYER_YELLOW = 3;
+const PLAYER_RED_COLOR = "red";
+const PLAYER_BLUE_COLOR = "blue";
+const PLAYER_GREEN_COLOR = "green";
+const PLAYER_YELLOW_COLOR = "yellow";
+const PLAYER_RED_FILE = "img/playingPieceRed.png";
+const PLAYER_BLUE_FILE = "img/playingPieceBlue.png";
+const PLAYER_GREEN_FILE = "img/playingPieceGreen.png";
+const PLAYER_YELLOW_FILE = "img/playingPieceYellow.png";
 
-const NUM_OF_SHELLS = 6;
-const SHELL_UP_FILE = "img/Shell_Up.png";
-const SHELL_DOWN_FILE = "img/Shell_Down.png";
+const NUM_OF_DICE = 2;
+const DICE_FACES = ["img/woodgrainDot1.png",
+  "img/woodgrainDot3.png",
+  "img/woodgrainDot4.png",
+  "img/woodgrainDot6.png"
+];
 const BTN_THROW = document.getElementById("throw");
 const TXT_VALUE = document.getElementById("value");
 const START_RED = document.getElementById("Red");
 const START_BLUE = document.getElementById("Blue");
 const START_GREEN = document.getElementById("Green");
 const START_YELLOW = document.getElementById("Yellow");
+
+var diceValue = [1, 3, 4, 6]
+var diceRoll = [0, 0];
 
 
 function RedStartClicked() {
@@ -27,30 +39,17 @@ START_RED.addEventListener("click", RedStartClicked, false);
 
 
 
-var aValue = [25, 10, 2, 3, 4, 5, 6]
-var value = -1;
-var rollAgain = false;
 
-function throwShells() {
+function throwDice() {
   console.log("throwing shells")
-  rollAgain = false;
-  let num_up = 0;
-  for (x = 0; x < NUM_OF_SHELLS; x++) {
-    let id = "s" + (x + 1);
-    console.log("ID: " + id);
-    let spin = Math.round(Math.random());
-    if (spin == 0) {
-      document.getElementById(id).src = SHELL_DOWN_FILE;
-    } else {
-      document.getElementById(id).src = SHELL_UP_FILE;
-      num_up++;
-    }
-    value = aValue[num_up];
-    TXT_VALUE.value = value;
-  }
-  if (num_up<2 ||  num_up==6)
-    rollAgain = false;
-  console.log("Number Up: " + num_up + "  Value: " + value);
-
+  for (x = 0; x < NUM_OF_DICE; x++) {
+    let id = "d" + (x + 1);
+    let spin = Math.floor(Math.random() * 4);
+    console.log("spin is: " + spin);
+    document.getElementById(id).src = DICE_FACES[spin];
+    diceRoll[x] = diceValue[spin];
+  } //  end for
+  value = diceRoll[0] + " + " + diceRoll[1];
+  TXT_VALUE.value = value;
 }
-BTN_THROW.addEventListener("click", throwShells, false);
+BTN_THROW.addEventListener("click", throwDice, false);
