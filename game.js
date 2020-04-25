@@ -193,9 +193,7 @@ function testMoves() {
 
   image1.src = "img/playingPieceRed.png"; //  move to that tmpSquare
   //  set previous square to what it was
-  if (playerInfo[PLAYER_RED].locations[0] == 0)
-    document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[95]]).src = previousSquare;
-  else
+  if (playerInfo[PLAYER_RED].locations[0] != 0)
     document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0] - 1]).src = previousSquare;
 
   previousSquare = tempSquare;
