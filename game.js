@@ -129,6 +129,8 @@ function makeMove(id, lift){
     moveType= false;
   } else {
     document.getElementById(imgID).src = tempSquare;
+    moveType=true;
+
   }
 }
 
