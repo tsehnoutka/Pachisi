@@ -14,22 +14,18 @@ const redMoves = ["B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9",
 ];
 //  Variables
 const playerInfo = [{
-    number: 0,
     color: "red",
     file: "img/playingPieceRed.png"
   },
   {
-    number: 1,
     color: "blue",
     file: "img/playingPieceBlue.png"
   },
   {
-    number: 2,
     color: "green",
     file: "img/playingPieceGreen.png"
   },
   {
-    number: 3,
     color: "yellow",
     file: "img/playingPieceYellow.png"
   },
@@ -56,6 +52,34 @@ var turn = 0;
 var test = true;
 redLocations[0] = 0;
 var previousSquare = "";
+var moveType = true;  //  true to lift peice, false to place piece
+var tmpMovePiece="";
+var outputMessage="";
+var displayMessage=false;
+
+
+
+jQuery(document).ready(function($) {
+  //  create the event handlers for each box of the game
+  console.log("about to create events");
+    for (x=0; x<redMoves.length; x++) {
+      let tmpId = redMoves[x]
+      console.log("creating click event for: " + tmpId);
+      let tempBtn= $("#"+tmpId);
+      tempBtn.on("click", function(event) {
+        makeMove(tmpId, moveType);
+        if (displayMessage)
+          alert(outputMessage);
+        displayMessage = false;
+      }); //  end of creating click function
+    } //  end of for x
+}); //  end document ready function
+
+function is_iPhone_or_iPod() {
+  return navigator.platform.match(/iPad/i) ||
+    navigator.platform.match(/iPhone/i) ||
+    navigator.platform.match(/MacIntel/i)
+}
 
 function sleep(milliseconds) {
   const date = Date.now();
@@ -87,6 +111,34 @@ BTN_THROW.addEventListener("click", throwDice, false);
 
 
 
+
+
+function makeMove(id, lift){
+  console.log("square: " + id + " lift?" + lift);
+  let imgID="i"+id;
+  let tmpImage = document.getElementById(imgID).src
+  if(lift){
+    if (tmpImage.split('/').pop() !== "") {
+      let a = tmpImage.split('/');
+      tempSquare = a[3] + "/" + a[4];
+      document.getElementById(imgID).src = "";
+    } else {
+      outputMessage= "Please select a valid space";
+      displayMessage = true;
+    }
+    moveType= false;
+  } else {
+    document.getElementById(imgID).src = tempSquare;
+  }
+}
+
+
+
+
+
+/*******************************************************************************
+ **   testing functions
+ *******************************************************************************/
 function togglePeices() {
   test = (test ^ true) ? true : false;
   let image2 = document.getElementById("i" + "97"); //Yellow
@@ -102,9 +154,9 @@ function togglePeices() {
     image4.src = "";
   }
 }
-
 function testMoves() {
   console.log("test movement");
+  /*
   throwDice()
   togglePeices();
   let tempSquare = "";
@@ -127,5 +179,6 @@ function testMoves() {
   if (turn > 3)
     turn = 0;
   TURNBOX.style.backgroundColor = playerInfo[turn++].color;
+  */
 }
 BTN_TEST.addEventListener("click", testMoves, false);
