@@ -25,6 +25,7 @@
 .LtBlue {
   background-color: LightSkyBlue;
 }
+
 .Blue {
   background-color: DodgerBlue;
 }
@@ -33,11 +34,11 @@
   background-color: LightCoral;
 }
 
-.Green{
+.Green {
   background-color: #bdf5bd;
 }
 
-.Yellow{
+.Yellow {
   background-color: #fcfce8;
 }
 
@@ -55,6 +56,8 @@
 }
 
 table {
+  border-collapse: collapse;
+  border-spacing: 0;
   margin: 5px auto;
 }
 
@@ -67,6 +70,7 @@ table {
   height: 25px;
   width: 100px
 }
+
 .cube {
   float: left;
   width: 15px;
@@ -75,4 +79,5 @@ table {
   padding: 10px;
   border: 1px solid black;
 }
+
 /

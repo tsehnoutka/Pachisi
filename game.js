@@ -1,11 +1,10 @@
 /* TODO:
  - cut a pawn ( I think i know)
- - show two colors on same square  (playingPieceRed2.png, etc)
- - How do I move a piece on and off the board
+ - How do I move a piece  off the board
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
  - doublet
- - make sure only the color of the player whose turn it is, is moving
+ - fix table layout  (HTML5 doesnt alow: <table> <table>)
 */
 const board = [
   //  red section
@@ -29,22 +28,22 @@ const board = [
 const playerInfo = [{
     color: "red",
     file: "img/playingPieceRed.png",
-    locations: [79, 47, -1, -1] //  these will be the indexes in to the board array below of the 4 red pieces
-  },
-  {
-    color: "blue",
-    file: "img/playingPieceBlue.png",
-    locations: [57, 73, -1,-1] //  these will be the indexes in to the board array below of the 4 green pieces
+    locations: [19, 19, 15, 14] //  these will be the indexes in to the board array below of the 4 red pieces
   },
   {
     color: "green",
     file: "img/playingPieceGreen.png",
-    locations: [33, -1, -1, -1] //  these will be the indexes in to the board array below of the 4 blue pieces
+    locations: [43, 43, 39, 38] //  these will be the indexes in to the board array below of the 4 blue pieces
+  },
+  {
+    color: "blue",
+    file: "img/playingPieceBlue.png",
+    locations: [67, 67, 62,63] //  these will be the indexes in to the board array below of the 4 green pieces
   },
   {
     color: "yellow",
     file: "img/playingPieceYellow.png",
-    locations: [81,-1, -1, -1] //  these will be the indexes in to the board array of the 4 yellow pieces
+    locations: [91,91, 87, 86] //  these will be the indexes in to the board array of the 4 yellow pieces
   },
 ]
 
@@ -79,6 +78,7 @@ var tmpMovePiece = "";
 var outputMessage = "";
 var displayMessage = false;
 var movingPiecePos = -1;   //  the index intor the player's location of the peice that is moving
+var doublet=false;
 
 
 
@@ -119,7 +119,7 @@ function sleep(milliseconds) {
  **                         Throw Dice
  *******************************************************************************/
 function throwDice() {
-  console.log("throwing shells");
+  doublet=false;
 
   for (x = 0; x < NUM_OF_DICE; x++) {
     let id = "d" + (x + 1);
@@ -128,6 +128,10 @@ function throwDice() {
     document.getElementById(id).src = DICE_FACES[spin];
     diceRoll[x] = diceValue[spin];
   } //  end for
+  if (diceRoll[0]==diceRoll[1]){
+    doublet=true;
+    console.log("rolled a doublet!");
+  }
   value = diceRoll[0] + " + " + diceRoll[1] + " : " + (diceRoll[0] + diceRoll[1]);
   TXT_VALUE.value = value;
 }
@@ -137,13 +141,13 @@ BTN_THROW.addEventListener("click", throwDice, false);
  **                         Make Move
  *******************************************************************************/
 function makeMove(id, lift) {
-  console.log("square: " + id + " lift? " + lift);
   //  check to see if this piece belongs to the color that is moving
   //  go through that color's locations array
   //  also need to check if the clicked square contains a piece.  this can be determined by going through the array
   //get the index of the id in board,  get the index of that in the player Info.locations array
   let boardPos = board.indexOf(id);
   movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
+  console.log("square ID/boardPos: " + id +"/" +boardPos + ((lift==true) ? " - Lifting":" - Placing"));
   let imgID = "i" + id;
   let tmpImage = document.getElementById(imgID).src //  get teh image on the clicked square
   if (lift) { //  if player is picking up piece....
