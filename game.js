@@ -4,6 +4,7 @@
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
  - doublet
+ - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
 */
 const board = [
@@ -38,12 +39,12 @@ const playerInfo = [{
   {
     color: "blue",
     file: "img/playingPieceBlue.png",
-    locations: [67, 67, 62,63] //  these will be the indexes in to the board array below of the 4 green pieces
+    locations: [67, 67, 62, 63] //  these will be the indexes in to the board array below of the 4 green pieces
   },
   {
     color: "yellow",
     file: "img/playingPieceYellow.png",
-    locations: [91,91, 87, 86] //  these will be the indexes in to the board array of the 4 yellow pieces
+    locations: [91, 91, 87, 86] //  these will be the indexes in to the board array of the 4 yellow pieces
   },
 ]
 
@@ -77,8 +78,8 @@ var moveType = true; //  true to lift peice, false to place piece
 var tmpMovePiece = "";
 var outputMessage = "";
 var displayMessage = false;
-var movingPiecePos = -1;   //  the index intor the player's location of the peice that is moving
-var doublet=false;
+var movingPiecePos = -1; //  the index intor the player's location of the peice that is moving
+var doublet = false;
 
 
 
@@ -95,6 +96,24 @@ jQuery(document).ready(function($) {
       displayMessage = false;
     }); //  end of creating click function
   } //  end of for x
+
+
+  //  have each player roll dice and see who starts first
+  let largestRoll = -1;
+  turn = 0;
+  for (let x=0; x < 4; x++) {
+    let roll = throwDice();
+    if (roll > largestRoll){
+      largestRoll= roll;
+      turn =x;
+    }
+  }
+  flipTurnIndicator();
+  let message= playerInfo[turn].color + " goes first";
+  console.log(playerInfo[turn].color + " goes first");
+  alert(message);
+
+
 }); //  end document ready function
 
 function is_iPhone_or_iPod() {
@@ -114,26 +133,35 @@ function sleep(milliseconds) {
   } while (currentDate - date < milliseconds);
 }
 
+/************************************************
+ **         flip turn indicator
+ ************************************************/
+ function flipTurnIndicator(){
+if (turn == 3)
+  turn = -1;
+TURNBOX.style.backgroundColor = playerInfo[++turn].color;
+}
 
 /*******************************************************************************
  **                         Throw Dice
  *******************************************************************************/
 function throwDice() {
-  doublet=false;
+  doublet = false;
 
-  for (x = 0; x < NUM_OF_DICE; x++) {
+  for (let x = 0; x < NUM_OF_DICE; x++) {
     let id = "d" + (x + 1);
     let spin = Math.floor(Math.random() * 4);
     //console.log("spin is: " + spin);
     document.getElementById(id).src = DICE_FACES[spin];
     diceRoll[x] = diceValue[spin];
   } //  end for
-  if (diceRoll[0]==diceRoll[1]){
-    doublet=true;
+  if (diceRoll[0] == diceRoll[1]) {
+    doublet = true;
     console.log("rolled a doublet!");
   }
   value = diceRoll[0] + " + " + diceRoll[1] + " : " + (diceRoll[0] + diceRoll[1]);
   TXT_VALUE.value = value;
+  return diceRoll[0] + diceRoll[1];
 }
 BTN_THROW.addEventListener("click", throwDice, false);
 
@@ -147,13 +175,13 @@ function makeMove(id, lift) {
   //get the index of the id in board,  get the index of that in the player Info.locations array
   let boardPos = board.indexOf(id);
   movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
-  console.log("square ID/boardPos: " + id +"/" +boardPos + ((lift==true) ? " - Lifting":" - Placing"));
+  console.log("square ID/boardPos: " + id + "/" + boardPos + ((lift == true) ? " - Lifting" : " - Placing"));
   let imgID = "i" + id;
   let tmpImage = document.getElementById(imgID).src //  get teh image on the clicked square
   if (lift) { //  if player is picking up piece....
 
-    if (movingPiecePos==-1){
-      alert ( "NOT your turn !!");
+    if (movingPiecePos == -1) {
+      alert("NOT your turn !!");
       return;
     }
 
@@ -170,13 +198,12 @@ function makeMove(id, lift) {
   } else { //  if player is placing piece on board
     document.getElementById(imgID).src = tempSquare;
     moveType = true;
-    playerInfo[turn].locations[movingPiecePos]=boardPos;
-    movingPiecePos=-1;
+    playerInfo[turn].locations[movingPiecePos] = boardPos;
+    movingPiecePos = -1;
 
     //  if the player is placing a piece, then change whose turn it is
-    if (turn == 3)
-      turn = -1;
-    TURNBOX.style.backgroundColor = playerInfo[++turn].color;
+    flipTurnIndicator()
+
   }
 }
 
