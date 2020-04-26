@@ -1,47 +1,50 @@
-// TODO:
-
-var redLocations = [0, 0, 0, 0]; //  these will be the indexes in to the array below of the 4 red pieces
-var greenLocations = [0, 0, 0, 0]; //  these will be the indexes in to the array below of the 4 green pieces
-var blueLocations = [0, 0, 0, 0]; //  these will be the indexes in to the array below of the 4 blue pieces
-var yellowLocations = [0, 0, 0, 0]; //  these will be the indexes in to the array below of the 4 yellow pieces
+/* TODO:
+ - cut a pawn ( I think i know)
+ - show two colors on same square  (playingPieceRed2.png, etc)
+ - How do I move a piece on and off the board
+ - How to manage turn when player moves two pieces instead of one
+ - prevent wrong color in belly
+ - doublet
+ - make sure only the color of the player whose turn it is, is moving
+*/
 const board = [
   //  red section
   "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "I9",
-  "B9", "C9", "D9", "E9", "F9", "G9", "H9", //red home
+  "B9", "C9", "D9", "E9", "F9", "G9", "H9", //red belly
   "IA", "HA", "GA", "FA", "EA", "DA", "CA", "BA",
   //  green section
   "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "9I",
-  "9B", "9C", "9D", "9E", "9F", "9G", "9H", // green home
+  "9B", "9C", "9D", "9E", "9F", "9G", "9H", // green belly
   "8I", "8H", "8G", "8F", "8E", "8D", "8C", "8B",
   //  blue section
   "7A", "6A", "5A", "4A", "3A", "2A", "1A", "0A", "09",
-  "79", "69", "59", "49", "39", "29", "19", // blue home
+  "79", "69", "59", "49", "39", "29", "19", // blue belly
   "08", "18", "28", "38", "48", "58", "68", "78",
   //  yellow section
   "87", "86", "85", "84", "83", "82", "81", "80", "90",
-  "97", "96", "95", "94", "93", "92", "91", //  yellow home
+  "97", "96", "95", "94", "93", "92", "91", //  yellow belly
   "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"
 ];
 //  Variables
 const playerInfo = [{
     color: "red",
     file: "img/playingPieceRed.png",
-    locations: [0, 0, 0, 0] //  these will be the indexes in to the board array below of the 4 red pieces
+    locations: [79, 47, -1, -1] //  these will be the indexes in to the board array below of the 4 red pieces
   },
   {
     color: "blue",
     file: "img/playingPieceBlue.png",
-    locations: [0, 0, 0, 0] //  these will be the indexes in to the board array below of the 4 green pieces
+    locations: [57, 73, -1,-1] //  these will be the indexes in to the board array below of the 4 green pieces
   },
   {
     color: "green",
     file: "img/playingPieceGreen.png",
-    locations: [0, 0, 0, 0] //  these will be the indexes in to the board array below of the 4 blue pieces
+    locations: [33, -1, -1, -1] //  these will be the indexes in to the board array below of the 4 blue pieces
   },
   {
     color: "yellow",
     file: "img/playingPieceYellow.png",
-    locations: [0, 0, 0, 0] //  these will be the indexes in to the board array of the 4 yellow pieces
+    locations: [81,-1, -1, -1] //  these will be the indexes in to the board array of the 4 yellow pieces
   },
 ]
 
@@ -59,6 +62,8 @@ const BTN_THROW = document.getElementById("throw");
 const BTN_TEST = document.getElementById("test");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
+
+// not sure if I need these....
 const START_RED = document.getElementById("Red");
 const START_BLUE = document.getElementById("Blue");
 const START_GREEN = document.getElementById("Green");
@@ -68,12 +73,12 @@ var diceValue = [1, 3, 4, 6]
 var diceRoll = [0, 0];
 var turn = 0;
 var test = true;
-playerInfo[PLAYER_RED].locations[0] = 0;
 var previousSquare = "";
 var moveType = true; //  true to lift peice, false to place piece
 var tmpMovePiece = "";
 var outputMessage = "";
 var displayMessage = false;
+var movingPiecePos = -1;   //  the index intor the player's location of the peice that is moving
 
 
 
@@ -98,6 +103,9 @@ function is_iPhone_or_iPod() {
     navigator.platform.match(/MacIntel/i)
 }
 
+/************************************************
+ **           sleep
+ ************************************************/
 function sleep(milliseconds) {
   const date = Date.now();
   let currentDate = null;
@@ -106,11 +114,10 @@ function sleep(milliseconds) {
   } while (currentDate - date < milliseconds);
 }
 
-function RedStartClicked() {
-  console.log("Red Start clicked")
-}
-START_RED.addEventListener("click", RedStartClicked, false);
 
+/*******************************************************************************
+ **                         Throw Dice
+ *******************************************************************************/
 function throwDice() {
   console.log("throwing shells");
 
@@ -126,17 +133,26 @@ function throwDice() {
 }
 BTN_THROW.addEventListener("click", throwDice, false);
 
-
-
-
-
+/*******************************************************************************
+ **                         Make Move
+ *******************************************************************************/
 function makeMove(id, lift) {
-  console.log("square: " + id + " lift?" + lift);
-
-
+  console.log("square: " + id + " lift? " + lift);
+  //  check to see if this piece belongs to the color that is moving
+  //  go through that color's locations array
+  //  also need to check if the clicked square contains a piece.  this can be determined by going through the array
+  //get the index of the id in board,  get the index of that in the player Info.locations array
+  let boardPos = board.indexOf(id);
+  movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
   let imgID = "i" + id;
-  let tmpImage = document.getElementById(imgID).src
-  if (lift) {
+  let tmpImage = document.getElementById(imgID).src //  get teh image on the clicked square
+  if (lift) { //  if player is picking up piece....
+
+    if (movingPiecePos==-1){
+      alert ( "NOT your turn !!");
+      return;
+    }
+
     if (tmpImage.split('/').pop() !== "") {
       let a = tmpImage.split('/');
       tempSquare = a[3] + "/" + a[4];
@@ -146,15 +162,18 @@ function makeMove(id, lift) {
       displayMessage = true;
     }
     moveType = false;
-  } else {
+
+  } else { //  if player is placing piece on board
     document.getElementById(imgID).src = tempSquare;
     moveType = true;
-  }
+    playerInfo[turn].locations[movingPiecePos]=boardPos;
+    movingPiecePos=-1;
 
-  if (turn == 3)
-    turn = -1;
-  if (!lift)
-  TURNBOX.style.backgroundColor = playerInfo[++turn].color;
+    //  if the player is placing a piece, then change whose turn it is
+    if (turn == 3)
+      turn = -1;
+    TURNBOX.style.backgroundColor = playerInfo[++turn].color;
+  }
 }
 
 /*******************************************************************************
