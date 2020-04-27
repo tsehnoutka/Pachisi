@@ -7,8 +7,8 @@
  - doublet
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
- - I don;t handle wif two or more players roll the same number when trying to figure out who shoudl go first
- - need to make sure a player can't place e apiece where there is already two of their peices
+ - I don't handle if two or more players roll the same number when trying to figure out who shoudl go first
+ - need to make sure a player can't place e a piece where there is already two of their peices
 */
 const board = [
   //  red section
@@ -29,40 +29,6 @@ const board = [
   "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"
 ];
 //  Variables
-const playerInfo = [{
-    color: "red",
-    file1: "img/playingPieceRed.png",
-    file2: "img/playingPieceRed2.png",
-    locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
-    start:0,
-    home:0
-  },
-  {
-    color: "green",
-    file1: "img/playingPieceGreen.png",
-    file2: "img/playingPieceGreen2.png",
-    locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
-    start:0,
-    home:0
-  },
-  {
-    color: "blue",
-    file1: "img/playingPieceBlue.png",
-    file2: "img/playingPieceBlue2.png",
-    locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
-    start:0,
-    home:0
-  },
-  {
-    color: "yellow",
-    file1: "img/playingPieceYellow.png",
-    file2: "img/playingPieceYellow2.png",
-    locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
-    start:0,
-    home:0
-  },
-]
-
 const NUM_OF_DICE = 2;
 const DICE_FACES = ["img/woodgrainDot1.png",
   "img/woodgrainDot3.png",
@@ -73,10 +39,52 @@ const PLAYER_RED = 0;
 const PLAYER_GREEN = 1;
 const PLAYER_BLUE = 2;
 const PLAYER_YELLOW = 3;
+const HOME_RED = document.getElementById("Red");
+const HOME_GREEN = document.getElementById("Green");
+const HOME_BLUE = document.getElementById("Blue");
+const HOME_YELLOW = document.getElementById("Yellow");
+const NUM_OF_PIECES = 4;
 const BTN_THROW = document.getElementById("throw");
 const BTN_TEST = document.getElementById("test");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
+const playerInfo = [{
+    color: "red",
+    pieceFile: "img/playingPieceRed.png",
+    startID: "hRed",
+    homeFile: "img/RedStart.png",
+    locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
+    start: 0,
+    home: HOME_RED
+  },
+  {
+    color: "green",
+    pieceFile: "img/playingPieceGreen.png",
+    startID: "hGrn",
+    homeFile: "img/GreenStart.png",
+    locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
+    start: 0,
+    home: HOME_GREEN
+  },
+  {
+    color: "blue",
+    pieceFile: "img/playingPieceBlue.png",
+    startID: "hBlu",
+    homeFile: "img/BlueStart.png",
+    locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
+    start: 0,
+    home: HOME_BLUE
+  },
+  {
+    color: "yellow",
+    pieceFile: "img/playingPieceYellow.png",
+    startID: "hYel",
+    homeFile: "img/YellowStart.png",
+    locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
+    start: 0,
+    home: HOME_YELLOW
+  },
+];
 
 var diceValue = [1, 3, 4, 6]
 var diceRoll = [0, 0];
@@ -109,7 +117,7 @@ jQuery(document).ready(function($) {
   //  have each player roll dice and see who starts first
   let largestRoll = -1;
   turn = 0;
-  for (let x = 0; x < 4; x++) {
+  for (let x = 0; x < NUM_OF_PIECES; x++) {
     let roll = throwDice();
     if (roll > largestRoll) {
       largestRoll = roll;
@@ -123,6 +131,9 @@ jQuery(document).ready(function($) {
   flipTurnIndicator();
 }); //  end document ready function
 
+/************************************************
+ **           is iPhone or iPad
+ ************************************************/
 function is_iPhone_or_iPod() {
   return navigator.platform.match(/iPad/i) ||
     navigator.platform.match(/iPhone/i) ||
@@ -149,6 +160,14 @@ function flipTurnIndicator() {
   TURNBOX.style.backgroundColor = playerInfo[++turn].color;
 }
 
+/************************************************
+ **            add Number To File
+ ************************************************/
+function addNumberToFile(fileName, n) {
+  let splitString = fileName.split('.');
+  return splitString[0] + n + "." + splitString[1];
+}
+
 /*******************************************************************************
  **                         Throw Dice
  *******************************************************************************/
@@ -172,6 +191,31 @@ function throwDice() {
 }
 BTN_THROW.addEventListener("click", throwDice, false);
 
+
+/*******************************************************************************
+ **                        update Start / Home
+ *******************************************************************************/
+function updateStartHome() {
+  for (let p = 0; p < 4; p++) { //  number of players
+    let player = playerInfo[p];
+    let startCount = 0;
+    let homeCount = 0;
+    for (let i = 0; i < 4; i++) {
+      if (player.locations[i] == -1)
+        startCount++;
+      if (player.locations[i] == 100)
+        homeCount++
+    } //  end for indexes
+    if (homeCount > 0)
+      player.home.src = addNumberToFile(player.homeFile, homeCount);
+    for (let s = 1; s <= startCount; s++) {
+      let newString = player.startID + s;
+      let homePip = document.getElementById(newString);
+      homePip.backgroundColor = player.color;
+    }
+  } // end for number of players
+} //  end of updateStartHome
+
 /*******************************************************************************
  **                         Make Move
  *******************************************************************************/
@@ -183,77 +227,74 @@ function makeMove(id, lift) {
   let boardPos = board.indexOf(id);
   console.log("square ID/boardPos: " + id + "/" + boardPos + ((lift == true) ? " - Lifting" : " - Placing"));
   let imgID = "i" + id;
-  let tmpImage = document.getElementById(imgID).src //  get teh image on the clicked square
-  if (lift) { //  if player is picking up piece....
-    movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
+  let tmpImage = document.getElementById(imgID).src //  get the image on the clicked square
 
-    if (movingPiecePos == -1) {
+  //  if player is picking up piece....
+  if (lift) {
+    movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
+    if (movingPiecePos == -1) { //  is it THIS player's turn  ??
       alert("NOT your turn !!");
       return;
     }
-    if (tmpImage.split('/').pop() !== "") {
-      let a = tmpImage.split('/');
-      tempSquare = a[3] + "/" + a[4];
-      document.getElementById(imgID).src = "";
+
+    if (tmpImage.split('/').pop() !== "") { //  if there is a piece on the board
+      //  need to check if I am moving a piece from a square that has two pieces on it
+      let found2 = tmpImage.indexOf("2.png");
+      tempSquare = playerInfo[turn].pieceFile;
+      if (found2 != -1)
+        document.getElementById(imgID).src = tempSquare;
+      else
+        document.getElementById(imgID).src = "";
+
     } else {
       outputMessage = "Please select a valid space";
       displayMessage = true;
     }
     moveType = false;
+  }  //  of of ligting a piece
 
-  } else { //  if player is placing piece on board
+  //  if player is placing piece on board
+  else {
     let p = 0; //  the player currently in that position
     let found = false;
-    while (p < 4 && !found) {
+
+    //  is there a piece the player is moving to ???
+    while (p < NUM_OF_PIECES && !found) {
       let pieceIndex = playerInfo[p].locations.indexOf(boardPos);
-      if ( - 1 != pieceIndex) {
+      if (-1 != pieceIndex)
         found = true;
-      }
-      p++;
+      else
+        p++;
     } //  end while
-    if (found) {
-      p--;
-    //  what color?
-      if (turn == p) //  same color as player
-        document.getElementById(imgID).src = playerInfo[p].file2;
-      else { //  Not the same color
+    if (found) {  //  there WAS a piece on the board
+      //  what color?
+      if (turn == p) { //  same color as player
+        let twoDots = addNumberToFile(playerInfo[p].pieceFile, 2);
+        document.getElementById(imgID).src = twoDots;
+      } else { //  Not the same color
         let pieceIndex = player[p].locations.indexOf(boardPos);
         player[p].locations.indexOf(pieceIndex) = -1; //  send the peice back to Home
         document.getElementById(imgID).src = tempSquare;
       }
-    } //  end if founnd
+    } //  end if found
+    else{  //  no piece on board
+      document.getElementById(imgID).src = tempSquare;
+    }
     moveType = true;
     playerInfo[turn].locations[movingPiecePos] = boardPos; // place the piece
     movingPiecePos = -1;
     //  if the player is placing a piece, then change whose turn it is
-    flipTurnIndicator()
+    flipTurnIndicator();
+    updateStartHome();
   } //  end of placing a peice
 }
 
 /*******************************************************************************
  **   testing functions
  *******************************************************************************/
-function togglePeices() {
-  test = (test ^ true) ? true : false;
-  let image2 = document.getElementById("i" + "97"); //Yellow
-  let image3 = document.getElementById("i" + "9B"); // green
-  let image4 = document.getElementById("i" + "79"); // blue
-  if (test) {
-    image2.src = "img/playingPieceYellow.png";
-    image3.src = "img/playingPieceGreen.png";
-    image4.src = "img/playingPieceBlue.png";
-  } else {
-    image2.src = "";
-    image3.src = "";
-    image4.src = "";
-  }
-}
-
 function testMoves() {
   console.log("test movement");
-
   throwDice()
-  //togglePeices();
 
   let tempSquare = "";
   let image1 = document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0]]); //red
