@@ -1,11 +1,13 @@
 /* TODO:
  - How do I move a piece onto the board from start
+- how do I move a piece off the board
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
  - doublet
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
  - I don't handle if two or more players roll the same number when trying to figure out who shoudl go first
+ - when someone has all pieces in Home, pass thier turn
 */
 const board = [
   //  red section
@@ -32,14 +34,15 @@ const DICE_FACES = ["img/woodgrainDot1.png",
   "img/woodgrainDot4.png",
   "img/woodgrainDot6.png"
 ];
+const NUM_OF_PLAYERS = 4;
 const PLAYER_RED = 0;
 const PLAYER_GREEN = 1;
 const PLAYER_BLUE = 2;
 const PLAYER_YELLOW = 3;
-const HOME_RED = document.getElementById("Red");
-const HOME_GREEN = document.getElementById("Green");
-const HOME_BLUE = document.getElementById("Blue");
-const HOME_YELLOW = document.getElementById("Yellow");
+const HOME_RED = document.getElementById("iRed");
+const HOME_GREEN = document.getElementById("iGreen");
+const HOME_BLUE = document.getElementById("iBlue");
+const HOME_YELLOW = document.getElementById("iYellow");
 const NUM_OF_PIECES = 4;
 const BTN_THROW = document.getElementById("throw");
 const BTN_TEST = document.getElementById("test");
@@ -52,7 +55,8 @@ const playerInfo = [{
     homeFile: "img/RedStart.png",
     locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
     start: 0,
-    home: HOME_RED
+    home: HOME_RED,
+    belly: ["B9", "C9", "D9", "E9", "F9", "G9", "H9"] //red belly
   },
   {
     color: "green",
@@ -61,7 +65,8 @@ const playerInfo = [{
     homeFile: "img/GreenStart.png",
     locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
     start: 0,
-    home: HOME_GREEN
+    home: HOME_GREEN,
+    belly: ["9B", "9C", "9D", "9E", "9F", "9G", "9H"] // green belly
   },
   {
     color: "blue",
@@ -70,7 +75,8 @@ const playerInfo = [{
     homeFile: "img/BlueStart.png",
     locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
     start: 0,
-    home: HOME_BLUE
+    home: HOME_BLUE,
+    belly: ["79", "69", "59", "49", "39", "29", "19"] // blue belly
   },
   {
     color: "yellow",
@@ -79,7 +85,8 @@ const playerInfo = [{
     homeFile: "img/YellowStart.png",
     locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
     start: 0,
-    home: HOME_YELLOW
+    home: HOME_YELLOW,
+    belly: ["97", "96", "95", "94", "93", "92", "91"] // yellow belly
   },
 ];
 
@@ -174,7 +181,7 @@ function throwDice() {
 
   for (let x = 0; x < NUM_OF_DICE; x++) {
     let id = "d" + (x + 1);
-    let spin = Math.floor(Math.random() * 4);
+    let spin = Math.floor(Math.random() * DICE_FACES.length);
     //console.log("spin is: " + spin);
     document.getElementById(id).src = DICE_FACES[spin];
     diceRoll[x] = diceValue[spin];
@@ -194,11 +201,11 @@ BTN_THROW.addEventListener("click", throwDice, false);
  **                        update Start / Home
  *******************************************************************************/
 function updateStartHome() {
-  for (let p = 0; p < 4; p++) { //  number of players
+  for (let p = 0; p < NUM_OF_PLAYERS; p++) { //  number of players
     let player = playerInfo[p];
     let startCount = 0;
     let homeCount = 0;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < NUM_OF_PIECES; i++) {
       if (player.locations[i] == -1)
         startCount++;
       if (player.locations[i] == 100)
@@ -257,6 +264,20 @@ function makeMove(id, lift) {
     let p = 0; //  the player currently in that position
     let found = false;
 
+    //  go throught the bellys and see if you are clicking where you shouldn't
+    for (let i=0; i<NUM_OF_PLAYERS;i++){
+      if(i==turn)
+        continue;
+      if (-1 != playerInfo[i].belly.indexOf(id)) {
+        document.getElementById(imageLiftedFrom).src = tempSquare;
+        alert("You can not place your piece in another player's Belly");
+        moveType = true;
+        return;
+      }
+
+    }
+
+
     //  is there a piece the player is moving to ???
     while (p < NUM_OF_PIECES && !found) {
       let pieceIndex = playerInfo[p].locations.indexOf(boardPos);
@@ -314,7 +335,8 @@ function makeMove(id, lift) {
  *******************************************************************************/
 function testMoves() {
   console.log("test movement");
-  throwDice()
+  throwDice();
+  //updateStartHome();
 
   let tempSquare = "";
   let image1 = document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0]]); //red
