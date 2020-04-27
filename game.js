@@ -3,9 +3,12 @@
  - How do I move a piece  off the board
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
+ - lift one of the two peices from  a square
  - doublet
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
+ - I don;t handle wif two or more players roll the same number when trying to figure out who shoudl go first
+ - need to make sure a player can't place e apiece where there is already two of their peices
 */
 const board = [
   //  red section
@@ -28,23 +31,35 @@ const board = [
 //  Variables
 const playerInfo = [{
     color: "red",
-    file: "img/playingPieceRed.png",
-    locations: [19, 19, 15, 14] //  these will be the indexes in to the board array below of the 4 red pieces
+    file1: "img/playingPieceRed.png",
+    file2: "img/playingPieceRed2.png",
+    locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
+    start:0,
+    home:0
   },
   {
     color: "green",
-    file: "img/playingPieceGreen.png",
-    locations: [43, 43, 39, 38] //  these will be the indexes in to the board array below of the 4 blue pieces
+    file1: "img/playingPieceGreen.png",
+    file2: "img/playingPieceGreen2.png",
+    locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
+    start:0,
+    home:0
   },
   {
     color: "blue",
-    file: "img/playingPieceBlue.png",
-    locations: [67, 67, 62, 63] //  these will be the indexes in to the board array below of the 4 green pieces
+    file1: "img/playingPieceBlue.png",
+    file2: "img/playingPieceBlue2.png",
+    locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
+    start:0,
+    home:0
   },
   {
     color: "yellow",
-    file: "img/playingPieceYellow.png",
-    locations: [91, 91, 87, 86] //  these will be the indexes in to the board array of the 4 yellow pieces
+    file1: "img/playingPieceYellow.png",
+    file2: "img/playingPieceYellow2.png",
+    locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
+    start:0,
+    home:0
   },
 ]
 
@@ -63,12 +78,6 @@ const BTN_TEST = document.getElementById("test");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
 
-// not sure if I need these....
-const START_RED = document.getElementById("Red");
-const START_BLUE = document.getElementById("Blue");
-const START_GREEN = document.getElementById("Green");
-const START_YELLOW = document.getElementById("Yellow");
-
 var diceValue = [1, 3, 4, 6]
 var diceRoll = [0, 0];
 var turn = 0;
@@ -85,7 +94,6 @@ var doublet = false;
 
 jQuery(document).ready(function($) {
   //  create the event handlers for each box of the game
-  console.log("about to create events");
   for (x = 0; x < board.length; x++) {
     let tmpId = board[x]
     let tempBtn = $("#" + tmpId);
@@ -101,19 +109,18 @@ jQuery(document).ready(function($) {
   //  have each player roll dice and see who starts first
   let largestRoll = -1;
   turn = 0;
-  for (let x=0; x < 4; x++) {
+  for (let x = 0; x < 4; x++) {
     let roll = throwDice();
-    if (roll > largestRoll){
-      largestRoll= roll;
-      turn =x;
+    if (roll > largestRoll) {
+      largestRoll = roll;
+      turn = x;
     }
   }
+  //let message = playerInfo[turn].color + " goes first";
+  //console.log(message);
+  //alert(message);
+  turn = -1; //  forcing the turn to be red for testing
   flipTurnIndicator();
-  let message= playerInfo[turn].color + " goes first";
-  console.log(playerInfo[turn].color + " goes first");
-  alert(message);
-
-
 }); //  end document ready function
 
 function is_iPhone_or_iPod() {
@@ -136,10 +143,10 @@ function sleep(milliseconds) {
 /************************************************
  **         flip turn indicator
  ************************************************/
- function flipTurnIndicator(){
-if (turn == 3)
-  turn = -1;
-TURNBOX.style.backgroundColor = playerInfo[++turn].color;
+function flipTurnIndicator() {
+  if (turn == 3)
+    turn = -1;
+  TURNBOX.style.backgroundColor = playerInfo[++turn].color;
 }
 
 /*******************************************************************************
@@ -174,17 +181,16 @@ function makeMove(id, lift) {
   //  also need to check if the clicked square contains a piece.  this can be determined by going through the array
   //get the index of the id in board,  get the index of that in the player Info.locations array
   let boardPos = board.indexOf(id);
-  movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
   console.log("square ID/boardPos: " + id + "/" + boardPos + ((lift == true) ? " - Lifting" : " - Placing"));
   let imgID = "i" + id;
   let tmpImage = document.getElementById(imgID).src //  get teh image on the clicked square
   if (lift) { //  if player is picking up piece....
+    movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
 
     if (movingPiecePos == -1) {
       alert("NOT your turn !!");
       return;
     }
-
     if (tmpImage.split('/').pop() !== "") {
       let a = tmpImage.split('/');
       tempSquare = a[3] + "/" + a[4];
@@ -196,15 +202,32 @@ function makeMove(id, lift) {
     moveType = false;
 
   } else { //  if player is placing piece on board
-    document.getElementById(imgID).src = tempSquare;
+    let p = 0; //  the player currently in that position
+    let found = false;
+    while (p < 4 && !found) {
+      let pieceIndex = playerInfo[p].locations.indexOf(boardPos);
+      if ( - 1 != pieceIndex) {
+        found = true;
+      }
+      p++;
+    } //  end while
+    if (found) {
+      p--;
+    //  what color?
+      if (turn == p) //  same color as player
+        document.getElementById(imgID).src = playerInfo[p].file2;
+      else { //  Not the same color
+        let pieceIndex = player[p].locations.indexOf(boardPos);
+        player[p].locations.indexOf(pieceIndex) = -1; //  send the peice back to Home
+        document.getElementById(imgID).src = tempSquare;
+      }
+    } //  end if founnd
     moveType = true;
-    playerInfo[turn].locations[movingPiecePos] = boardPos;
+    playerInfo[turn].locations[movingPiecePos] = boardPos; // place the piece
     movingPiecePos = -1;
-
     //  if the player is placing a piece, then change whose turn it is
     flipTurnIndicator()
-
-  }
+  } //  end of placing a peice
 }
 
 /*******************************************************************************

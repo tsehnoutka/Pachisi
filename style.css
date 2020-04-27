@@ -31,7 +31,7 @@
 }
 
 .Red {
-  background-color: LightCoral;
+  background-color: #f4a4a4;
 }
 
 .Green {
@@ -42,18 +42,6 @@
   background-color: #fcfce8;
 }
 
-.BlueX {
-  border: solid dashed yellow thick;
-  background-color: LightSkyBlue;
-  color: #FFFF00;
-  font-size: 20px;
-}
-
-.RedX {
-  background-color: LightCoral;
-  color: #FFFF00;
-  font-size: 20px;
-}
 
 table {
   border-collapse: collapse;
