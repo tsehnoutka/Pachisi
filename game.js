@@ -1,6 +1,5 @@
 /* TODO:
- - cut a pawn ( I think i know)
- - How do I move a piece  off the board
+ - How do I move a piece onto the board
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
  - lift one of the two peices from  a square
@@ -51,7 +50,7 @@ const TURNBOX = document.getElementById("turnbox");
 const playerInfo = [{
     color: "red",
     pieceFile: "img/playingPieceRed.png",
-    startID: "hRed",
+    startID: "sRed",
     homeFile: "img/RedStart.png",
     locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
     start: 0,
@@ -60,7 +59,7 @@ const playerInfo = [{
   {
     color: "green",
     pieceFile: "img/playingPieceGreen.png",
-    startID: "hGrn",
+    startID: "sGrn",
     homeFile: "img/GreenStart.png",
     locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
     start: 0,
@@ -69,7 +68,7 @@ const playerInfo = [{
   {
     color: "blue",
     pieceFile: "img/playingPieceBlue.png",
-    startID: "hBlu",
+    startID: "sBlu",
     homeFile: "img/BlueStart.png",
     locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
     start: 0,
@@ -78,7 +77,7 @@ const playerInfo = [{
   {
     color: "yellow",
     pieceFile: "img/playingPieceYellow.png",
-    startID: "hYel",
+    startID: "sYel",
     homeFile: "img/YellowStart.png",
     locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
     start: 0,
@@ -211,7 +210,7 @@ function updateStartHome() {
     for (let s = 1; s <= startCount; s++) {
       let newString = player.startID + s;
       let homePip = document.getElementById(newString);
-      homePip.backgroundColor = player.color;
+      homePip.style.backgroundColor = player.color;
     }
   } // end for number of players
 } //  end of updateStartHome
@@ -251,7 +250,7 @@ function makeMove(id, lift) {
       displayMessage = true;
     }
     moveType = false;
-  }  //  of of ligting a piece
+  } //  of of ligting a piece
 
   //  if player is placing piece on board
   else {
@@ -266,18 +265,28 @@ function makeMove(id, lift) {
       else
         p++;
     } //  end while
-    if (found) {  //  there WAS a piece on the board
+    if (found) { //  there WAS a piece on the board
       //  what color?
       if (turn == p) { //  same color as player
         let twoDots = addNumberToFile(playerInfo[p].pieceFile, 2);
         document.getElementById(imgID).src = twoDots;
       } else { //  Not the same color
-        let pieceIndex = player[p].locations.indexOf(boardPos);
-        player[p].locations.indexOf(pieceIndex) = -1; //  send the peice back to Home
+        let otherPlayer = -1;
+        if (-1 != tmpImage.indexOf("Red"))
+          otherPlayer = PLAYER_RED;
+        if (-1 != tmpImage.indexOf("Green"))
+          otherPlayer = PLAYER_GREEN;
+        if (-1 != tmpImage.indexOf("Blue"))
+          otherPlayer = PLAYER_BLUE;
+        if (-1 != tmpImage.indexOf("Yellow"))
+          otherPlayer = PLAYER_YELLOW;
+
+        let pieceIndex = playerInfo[otherPlayer].locations.indexOf(boardPos);
+        playerInfo[otherPlayer].locations[pieceIndex] = -1; //  send the peice back to Home
         document.getElementById(imgID).src = tempSquare;
       }
     } //  end if found
-    else{  //  no piece on board
+    else { //  no piece on board
       document.getElementById(imgID).src = tempSquare;
     }
     moveType = true;
