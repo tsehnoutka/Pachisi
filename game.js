@@ -1,13 +1,11 @@
 /* TODO:
- - How do I move a piece onto the board
+ - How do I move a piece onto the board from start
  - How to manage turn when player moves two pieces instead of one
  - prevent wrong color in belly
- - lift one of the two peices from  a square
  - doublet
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
  - I don't handle if two or more players roll the same number when trying to figure out who shoudl go first
- - need to make sure a player can't place e a piece where there is already two of their peices
 */
 const board = [
   //  red section
@@ -96,6 +94,7 @@ var outputMessage = "";
 var displayMessage = false;
 var movingPiecePos = -1; //  the index intor the player's location of the peice that is moving
 var doublet = false;
+var imageLiftedFrom;  // this is the image of the place the piece was lifted from
 
 
 
@@ -250,6 +249,7 @@ function makeMove(id, lift) {
       displayMessage = true;
     }
     moveType = false;
+    imageLiftedFrom = imgID;
   } //  of of ligting a piece
 
   //  if player is placing piece on board
@@ -266,6 +266,17 @@ function makeMove(id, lift) {
         p++;
     } //  end while
     if (found) { //  there WAS a piece on the board
+      //  i need to check if there are already two peices on that tmpSquare
+      if (-1 != tmpImage.indexOf("2.png")){
+        //  put the piece ack where it was
+        document.getElementById(imageLiftedFrom).src = tempSquare;
+        imageLiftedFrom="";
+        //  alert user
+        alert("You can not place a piece on a square occupied by 2 pawns.")
+        moveType = true;
+        return;
+
+      }
       //  what color?
       if (turn == p) { //  same color as player
         let twoDots = addNumberToFile(playerInfo[p].pieceFile, 2);
