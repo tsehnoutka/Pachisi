@@ -12,6 +12,14 @@
   align: center;
   vertical-align: center;
 }
+.spacer{
+    background-color: transparent;
+    border: none;
+    cursor: auto;
+}
+.StartColor {
+  background-color: CornflowerBlue;
+}
 
 .shell {
   width: 400px;

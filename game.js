@@ -1,13 +1,12 @@
 /* TODO:
- - How do I move a piece onto the board from start
-- how do I move a piece off the board
  - How to manage turn when player moves two pieces instead of one
- - prevent wrong color in belly
+ - how do I move a piece off the board to Home ( has to be an exact roll)
  - doublet
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
  - I don't handle if two or more players roll the same number when trying to figure out who shoudl go first
  - when someone has all pieces in Home, pass thier turn
+ -
 */
 const board = [
   //  red section
@@ -25,7 +24,8 @@ const board = [
   //  yellow section
   "87", "86", "85", "84", "83", "82", "81", "80", "90",
   "97", "96", "95", "94", "93", "92", "91", //  yellow belly
-  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"
+  "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7",
+  "StartHome", "RedStart", "GreenStart", "BlueStart", "YellowStart",
 ];
 //  Variables
 const NUM_OF_DICE = 2;
@@ -39,53 +39,56 @@ const PLAYER_RED = 0;
 const PLAYER_GREEN = 1;
 const PLAYER_BLUE = 2;
 const PLAYER_YELLOW = 3;
-const HOME_RED = document.getElementById("iRed");
-const HOME_GREEN = document.getElementById("iGreen");
-const HOME_BLUE = document.getElementById("iBlue");
-const HOME_YELLOW = document.getElementById("iYellow");
+const HOME_RED = document.getElementById("iRedHome");
+const HOME_GREEN = document.getElementById("iGreenHome");
+const HOME_BLUE = document.getElementById("iBlueHome");
+const HOME_YELLOW = document.getElementById("iYellowHome");
+const START_RED = document.getElementById("iRedStart");
+const START_GREEN = document.getElementById("iGreenStart");
+const START_BLUE = document.getElementById("iBlueStart");
+const START_YELLOW = document.getElementById("iYellowStart");
+const START_HOME = document.getElementById("StartHome");
 const NUM_OF_PIECES = 4;
 const BTN_THROW = document.getElementById("throw");
+const BTN_RESET = document.getElementById("playagain");
 const BTN_TEST = document.getElementById("test");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
+
 const playerInfo = [{
     color: "red",
     pieceFile: "img/playingPieceRed.png",
-    startID: "sRed",
+    homeImg: HOME_RED,
     homeFile: "img/RedStart.png",
     locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
-    start: 0,
-    home: HOME_RED,
+    startImg: START_RED,
     belly: ["B9", "C9", "D9", "E9", "F9", "G9", "H9"] //red belly
   },
   {
     color: "green",
     pieceFile: "img/playingPieceGreen.png",
-    startID: "sGrn",
+    homeImg: HOME_GREEN,
     homeFile: "img/GreenStart.png",
     locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
-    start: 0,
-    home: HOME_GREEN,
+    startImg: START_GREEN,
     belly: ["9B", "9C", "9D", "9E", "9F", "9G", "9H"] // green belly
   },
   {
     color: "blue",
     pieceFile: "img/playingPieceBlue.png",
-    startID: "sBlu",
+    homeImg: HOME_BLUE,
     homeFile: "img/BlueStart.png",
     locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
-    start: 0,
-    home: HOME_BLUE,
+    startImg: START_BLUE,
     belly: ["79", "69", "59", "49", "39", "29", "19"] // blue belly
   },
   {
     color: "yellow",
     pieceFile: "img/playingPieceYellow.png",
-    startID: "sYel",
+    homeImg: HOME_YELLOW,
     homeFile: "img/YellowStart.png",
     locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
-    start: 0,
-    home: HOME_YELLOW,
+    startImg: START_YELLOW,
     belly: ["97", "96", "95", "94", "93", "92", "91"] // yellow belly
   },
 ];
@@ -93,7 +96,6 @@ const playerInfo = [{
 var diceValue = [1, 3, 4, 6]
 var diceRoll = [0, 0];
 var turn = 0;
-var test = true;
 var previousSquare = "";
 var moveType = true; //  true to lift peice, false to place piece
 var tmpMovePiece = "";
@@ -101,9 +103,40 @@ var outputMessage = "";
 var displayMessage = false;
 var movingPiecePos = -1; //  the index intor the player's location of the peice that is moving
 var doublet = false;
-var imageLiftedFrom;  // this is the image of the place the piece was lifted from
+var imageLiftedFrom; // this is the image of the place the piece was lifted from
+
+function initializeBoard() {
+  turn = 0;
+  previousSquare = "";
+  moveType = true; //  true to lift peice, false to place piece
+  tmpMovePiece = "";
+  outputMessage = "";
+  displayMessage = false;
+  movingPiecePos = -1; //  the index intor the player's location of the peice that is moving
+  doublet = false;
+  playerInfo[0].locations = [19, 19, 15, 14];
+  playerInfo[1].locations = [43, 43, 39, 38];
+  playerInfo[2].locations = [67, 67, 62, 63];
+  playerInfo[3].locations = [91, 91, 87, 86];
 
 
+  //  have each player roll dice and see who starts first
+  let largestRoll = -1;
+  turn = 0;
+  for (let x = 0; x < NUM_OF_PIECES; x++) {
+    let roll = throwDice();
+    if (roll > largestRoll) {
+      largestRoll = roll;
+      turn = x;
+    }
+  }
+  let message = playerInfo[turn].color + " goes first";
+  console.log(message);
+  alert(message);
+  turn -= 1; //  flip trun increments before flipping
+  flipTurnIndicator();
+}
+BTN_RESET.addEventListener("click", initializeBoard, false);
 
 jQuery(document).ready(function($) {
   //  create the event handlers for each box of the game
@@ -117,23 +150,9 @@ jQuery(document).ready(function($) {
       displayMessage = false;
     }); //  end of creating click function
   } //  end of for x
+  initializeBoard();
 
 
-  //  have each player roll dice and see who starts first
-  let largestRoll = -1;
-  turn = 0;
-  for (let x = 0; x < NUM_OF_PIECES; x++) {
-    let roll = throwDice();
-    if (roll > largestRoll) {
-      largestRoll = roll;
-      turn = x;
-    }
-  }
-  //let message = playerInfo[turn].color + " goes first";
-  //console.log(message);
-  //alert(message);
-  turn = -1; //  forcing the turn to be red for testing
-  flipTurnIndicator();
 }); //  end document ready function
 
 /************************************************
@@ -212,12 +231,9 @@ function updateStartHome() {
         homeCount++
     } //  end for indexes
     if (homeCount > 0)
-      player.home.src = addNumberToFile(player.homeFile, homeCount);
-    for (let s = 1; s <= startCount; s++) {
-      let newString = player.startID + s;
-      let homePip = document.getElementById(newString);
-      homePip.style.backgroundColor = player.color;
-    }
+      player.homeImg.src = addNumberToFile(player.homeFile, homeCount);
+    if (startCount > 0)
+      player.startImg.src = addNumberToFile(player.pieceFile, startCount);
   } // end for number of players
 } //  end of updateStartHome
 
@@ -225,18 +241,17 @@ function updateStartHome() {
  **                         Make Move
  *******************************************************************************/
 function makeMove(id, lift) {
-  //  check to see if this piece belongs to the color that is moving
-  //  go through that color's locations array
-  //  also need to check if the clicked square contains a piece.  this can be determined by going through the array
-  //get the index of the id in board,  get the index of that in the player Info.locations array
+  //  board pos == 95 is the Start / Home button.  anything greater is Start pieces
   let boardPos = board.indexOf(id);
   console.log("square ID/boardPos: " + id + "/" + boardPos + ((lift == true) ? " - Lifting" : " - Placing"));
   let imgID = "i" + id;
   let tmpImage = document.getElementById(imgID).src //  get the image on the clicked square
-
   //  if player is picking up piece....
   if (lift) {
-    movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
+    if (boardPos > 96)
+      movingPiecePos = playerInfo[turn].locations.indexOf(-1);
+    else
+      movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
     if (movingPiecePos == -1) { //  is it THIS player's turn  ??
       alert("NOT your turn !!");
       return;
@@ -257,7 +272,9 @@ function makeMove(id, lift) {
     }
     moveType = false;
     imageLiftedFrom = imgID;
-  } //  of of ligting a piece
+    START_HOME.textContent = "Home";
+    START_HOME.disabled=false;
+  } //  of of lifting a piece
 
   //  if player is placing piece on board
   else {
@@ -265,8 +282,8 @@ function makeMove(id, lift) {
     let found = false;
 
     //  go throught the bellys and see if you are clicking where you shouldn't
-    for (let i=0; i<NUM_OF_PLAYERS;i++){
-      if(i==turn)
+    for (let i = 0; i < NUM_OF_PLAYERS; i++) {
+      if (i == turn)
         continue;
       if (-1 != playerInfo[i].belly.indexOf(id)) {
         document.getElementById(imageLiftedFrom).src = tempSquare;
@@ -288,10 +305,10 @@ function makeMove(id, lift) {
     } //  end while
     if (found) { //  there WAS a piece on the board
       //  i need to check if there are already two peices on that tmpSquare
-      if (-1 != tmpImage.indexOf("2.png")){
+      if (-1 != tmpImage.indexOf("2.png")) {
         //  put the piece ack where it was
         document.getElementById(imageLiftedFrom).src = tempSquare;
-        imageLiftedFrom="";
+        imageLiftedFrom = "";
         //  alert user
         alert("You can not place a piece on a square occupied by 2 pawns.")
         moveType = true;
@@ -327,6 +344,9 @@ function makeMove(id, lift) {
     //  if the player is placing a piece, then change whose turn it is
     flipTurnIndicator();
     updateStartHome();
+    START_HOME.textContent = "Start";
+    START_HOME.disabled=true;
+
   } //  end of placing a peice
 }
 
@@ -353,7 +373,7 @@ function testMoves() {
     document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0] - 1]).src = previousSquare;
 
   previousSquare = tempSquare;
-  if (playerInfo[PLAYER_RED].locations[0] == 95)
+  if (playerInfo[PLAYER_RED].locations[0] == 99)
     playerInfo[PLAYER_RED].locations[0] = 0;
   else
     playerInfo[PLAYER_RED].locations[0] += 1;
