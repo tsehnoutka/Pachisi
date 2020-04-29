@@ -1,11 +1,9 @@
 /* TODO:
  - How to manage turn when player moves two pieces instead of one
- - how do I move a piece off the board to Home ( has to be an exact roll)
- - doublet
+ - doublet ( move a pair)
  - right now I HAVE to have 4 players
  - fix table layout  (HTML5 doesnt alow: <table> <table>)
  - I don't handle if two or more players roll the same number when trying to figure out who shoudl go first
- - when someone has all pieces in Home, pass thier turn
  -
 */
 const board = [
@@ -54,12 +52,13 @@ const BTN_RESET = document.getElementById("playagain");
 const BTN_TEST = document.getElementById("test");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
+const HOMEPOS = 96;
 
 const playerInfo = [{
     color: "red",
     pieceFile: "img/playingPieceRed.png",
     homeImg: HOME_RED,
-    homeFile: "img/RedStart.png",
+    homeFile: "img/RedHome.png",
     locations: [19, 19, 15, 14], //  these will be the indexes in to the board array below of the 4 red pieces
     startImg: START_RED,
     belly: ["B9", "C9", "D9", "E9", "F9", "G9", "H9"] //red belly
@@ -68,7 +67,7 @@ const playerInfo = [{
     color: "green",
     pieceFile: "img/playingPieceGreen.png",
     homeImg: HOME_GREEN,
-    homeFile: "img/GreenStart.png",
+    homeFile: "img/GreenHome.png",
     locations: [43, 43, 39, 38], //  these will be the indexes in to the board array below of the 4 blue pieces
     startImg: START_GREEN,
     belly: ["9B", "9C", "9D", "9E", "9F", "9G", "9H"] // green belly
@@ -77,7 +76,7 @@ const playerInfo = [{
     color: "blue",
     pieceFile: "img/playingPieceBlue.png",
     homeImg: HOME_BLUE,
-    homeFile: "img/BlueStart.png",
+    homeFile: "img/BlueHome.png",
     locations: [67, 67, 62, 63], //  these will be the indexes in to the board array below of the 4 green pieces
     startImg: START_BLUE,
     belly: ["79", "69", "59", "49", "39", "29", "19"] // blue belly
@@ -86,7 +85,7 @@ const playerInfo = [{
     color: "yellow",
     pieceFile: "img/playingPieceYellow.png",
     homeImg: HOME_YELLOW,
-    homeFile: "img/YellowStart.png",
+    homeFile: "img/YellowHome.png",
     locations: [91, 91, 87, 86], //  these will be the indexes in to the board array of the 4 yellow pieces
     startImg: START_YELLOW,
     belly: ["97", "96", "95", "94", "93", "92", "91"] // yellow belly
@@ -230,8 +229,12 @@ function updateStartHome() {
       if (player.locations[i] == 100)
         homeCount++
     } //  end for indexes
-    if (homeCount > 0)
-      player.homeImg.src = addNumberToFile(player.homeFile, homeCount);
+    if (homeCount > 0){
+      let a = player.homeImg;
+      let b = addNumberToFile(player.homeFile, homeCount);;
+      a.src=b;
+      //player.homeImg.src = addNumberToFile(player.homeFile, homeCount);
+    }
     if (startCount > 0)
       player.startImg.src = addNumberToFile(player.pieceFile, startCount);
   } // end for number of players
@@ -245,10 +248,12 @@ function makeMove(id, lift) {
   let boardPos = board.indexOf(id);
   console.log("square ID/boardPos: " + id + "/" + boardPos + ((lift == true) ? " - Lifting" : " - Placing"));
   let imgID = "i" + id;
-  let tmpImage = document.getElementById(imgID).src //  get the image on the clicked square
+  let tmpImage = "";
+  if (boardPos != HOMEPOS)
+    tmpImage = document.getElementById(imgID).src //  get the image on the clicked square
   //  if player is picking up piece....
   if (lift) {
-    if (boardPos > 96)
+    if (boardPos > HOMEPOS)
       movingPiecePos = playerInfo[turn].locations.indexOf(-1);
     else
       movingPiecePos = playerInfo[turn].locations.indexOf(boardPos);
@@ -273,9 +278,10 @@ function makeMove(id, lift) {
     moveType = false;
     imageLiftedFrom = imgID;
     START_HOME.textContent = "Home";
-    START_HOME.disabled=false;
+    START_HOME.disabled = false;
   } //  of of lifting a piece
 
+  // ***************************************************************************
   //  if player is placing piece on board
   else {
     let p = 0; //  the player currently in that position
@@ -291,10 +297,7 @@ function makeMove(id, lift) {
         moveType = true;
         return;
       }
-
     }
-
-
     //  is there a piece the player is moving to ???
     while (p < NUM_OF_PIECES && !found) {
       let pieceIndex = playerInfo[p].locations.indexOf(boardPos);
@@ -336,7 +339,11 @@ function makeMove(id, lift) {
       }
     } //  end if found
     else { //  no piece on board
-      document.getElementById(imgID).src = tempSquare;
+      //  did you click on HOME?
+      if (boardPos == HOMEPOS)
+        boardPos = 100;
+      else
+        document.getElementById(imgID).src = tempSquare;
     }
     moveType = true;
     playerInfo[turn].locations[movingPiecePos] = boardPos; // place the piece
@@ -345,7 +352,7 @@ function makeMove(id, lift) {
     flipTurnIndicator();
     updateStartHome();
     START_HOME.textContent = "Start";
-    START_HOME.disabled=true;
+    START_HOME.disabled = true;
 
   } //  end of placing a peice
 }
