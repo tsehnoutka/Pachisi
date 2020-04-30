@@ -49,7 +49,7 @@ const START_HOME = document.getElementById("StartHome");
 const NUM_OF_PIECES = 4;
 const BTN_THROW = document.getElementById("throw");
 const BTN_RESET = document.getElementById("playagain");
-const BTN_TEST = document.getElementById("test");
+const BTN_DONE = document.getElementById("done");
 const TXT_VALUE = document.getElementById("value");
 const TURNBOX = document.getElementById("turnbox");
 const HOMEPOS = 96;
@@ -349,7 +349,6 @@ function makeMove(id, lift) {
     playerInfo[turn].locations[movingPiecePos] = boardPos; // place the piece
     movingPiecePos = -1;
     //  if the player is placing a piece, then change whose turn it is
-    flipTurnIndicator();
     updateStartHome();
     START_HOME.textContent = "Start";
     START_HOME.disabled = true;
@@ -360,34 +359,8 @@ function makeMove(id, lift) {
 /*******************************************************************************
  **   testing functions
  *******************************************************************************/
-function testMoves() {
-  console.log("test movement");
-  throwDice();
-  //updateStartHome();
-
-  let tempSquare = "";
-  let image1 = document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0]]); //red
-  if (image1.src.split('/').pop() !== "") {
-    let a = image1.src.split('/');
-    tempSquare = a[3] + "/" + a[4];
-  } else {
-    tempSquare = "";
-  }
-
-  image1.src = "img/playingPieceRed.png"; //  move to that tmpSquare
-  //  set previous square to what it was
-  if (playerInfo[PLAYER_RED].locations[0] != 0)
-    document.getElementById("i" + board[playerInfo[PLAYER_RED].locations[0] - 1]).src = previousSquare;
-
-  previousSquare = tempSquare;
-  if (playerInfo[PLAYER_RED].locations[0] == 99)
-    playerInfo[PLAYER_RED].locations[0] = 0;
-  else
-    playerInfo[PLAYER_RED].locations[0] += 1;
-
-  if (turn > 3)
-    turn = 0;
-  TURNBOX.style.backgroundColor = playerInfo[turn++].color;
+function doneWithTurn() {
+  flipTurnIndicator();
 
 }
-BTN_TEST.addEventListener("click", testMoves, false);
+BTN_DONE.addEventListener("click", doneWithTurn, false);
