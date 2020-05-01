@@ -55,6 +55,7 @@ const TURNBOX = document.getElementById("turnbox");
 const HOMEPOS = 96;
 
 const playerInfo = [{
+    name: "Red",
     color: "red",
     pieceFile: "img/playingPieceRed.png",
     homeImg: HOME_RED,
@@ -64,7 +65,8 @@ const playerInfo = [{
     belly: ["B9", "C9", "D9", "E9", "F9", "G9", "H9"] //red belly
   },
   {
-    color: "green",
+    name: "Green",
+    color: "#00FF00",
     pieceFile: "img/playingPieceGreen.png",
     homeImg: HOME_GREEN,
     homeFile: "img/GreenHome.png",
@@ -73,6 +75,7 @@ const playerInfo = [{
     belly: ["9B", "9C", "9D", "9E", "9F", "9G", "9H"] // green belly
   },
   {
+    name: "Blue",
     color: "blue",
     pieceFile: "img/playingPieceBlue.png",
     homeImg: HOME_BLUE,
@@ -82,6 +85,7 @@ const playerInfo = [{
     belly: ["79", "69", "59", "49", "39", "29", "19"] // blue belly
   },
   {
+    name:"Yellow",
     color: "yellow",
     pieceFile: "img/playingPieceYellow.png",
     homeImg: HOME_YELLOW,
@@ -129,7 +133,7 @@ function initializeBoard() {
       turn = x;
     }
   }
-  let message = playerInfo[turn].color + " goes first";
+  let message = playerInfo[turn].name + " goes first";
   console.log(message);
   alert(message);
   turn -= 1; //  flip trun increments before flipping
