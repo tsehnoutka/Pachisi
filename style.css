@@ -50,6 +50,15 @@
   background-color: #fcfce8;
 }
 
+.content {
+  padding: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  overflow-y: scroll;
+  border: 1px solid #CCC;
+  margin-top: 10px;
+  height: 80px;
+}
 
 table {
   border-collapse: collapse;
