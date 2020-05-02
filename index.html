@@ -24,12 +24,12 @@
           <table>
             <tr>
               <td style="width: 353px">
-			  <img id="d1" class="dice" src="img/woodgrainDot1.png" width="335" /></td>
+                <img id="d1" class="dice" src="img/woodgrainDot1.png" width="335" /></td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td style="width: 353px">
-			  <img id="d2" class="dice" src="img/woodgrainDot1.png" width="333" /></td>
+                <img id="d2" class="dice" src="img/woodgrainDot1.png" width="333" /></td>
               <td>&nbsp;</td>
             </tr>
 
@@ -94,7 +94,8 @@
       </tr>
       <tr>
         <td rowspan="4">
-		<div id="content" class="content" style="width: 458px; height: 136px;"></div></td>
+          <div id="content" class="content" style="width: 458px; height: 136px;"></div>
+        </td>
         <td style="height: 45px"><button id="80" class="grid LtBlue"><img src="" id="i80" /></button></td>
         <td style="height: 45px"><button id="81" class="grid LtBlue"><img src="" id="i81" /></button></td>
         <td style="height: 45px"><button id="82" class="grid LtBlue"><img src="" id="i82" /></button></td>
@@ -181,48 +182,60 @@
       </tr>
       <tr>
         <td>
-        <div class="auto-style3">
+          <div class="auto-style3">
             <span id="status">&nbsp;</span><input type="text" id="input" class="input" disabled style="width: 312px" />
-          <input type="checkbox" id="playSound" checked>play sound</input>
-          <br>
-        </div>
-        <div></td>
+            <input type="checkbox" id="playSound" checked>play sound</input>
+            <br>
+          </div>
+          <div>
+        </td>
         <td><button id="D8" class="grid LtBlue"><img src="" id="iD8" /></button></td>
         <td><button id="D9" class="grid Red"><img src="" id="iD9" /></button></td>
         <td><button id="DA" class="grid LtBlue"><img src="" id="iDA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div>
+            Player 1: <input type="text" name="jname" id="p1Name" placeholder="Enter your name" size="15" required>
+            <button id="new">Create</button>
+          </div>
+        </td>
         <td><button id="E8" class="grid LtBlue"><img src="" id="iE8" /></button></td>
         <td><button id="E9" class="grid Red"><img src="" id="iE9" /></button></td>
         <td><button id="EA" class="grid LtBlue"><img src="" id="iEA" /></button></td>
       </tr>
       <tr>
-        <td><div>
-          Player 2: <input type="text" name="jname" id="p2Name" placeholder="Enter your name" size="15" required>
-          Code: <input type="text" name="room" id="room" placeholder="Enter code" size="6" required>
-          <button id="p2join">Join</button>
-        </div></td>
+        <td>
+          <div>
+            Player 2: <input type="text" name="jname" id="p2Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i2room" placeholder="Enter code" size="6" required>
+            <button id="p2Join">Join</button>
+          </div>
+        </td>
         <td><button id="F8" class="grid LtBlue"><img src="" id="iF8" /></button></td>
         <td><button id="F9" class="grid Red"><img src="" id="iF9" /></button></td>
         <td><button id="FA" class="grid LtBlue"><img src="img/playingPieceRed2.png" id="iFA" /></button></td>
       </tr>
       <tr>
-        <td><div>
-          Player 3: <input type="text" name="jname" id="p3Name" placeholder="Enter your name" size="15" required>
-          Code: <input type="text" name="room" id="room" placeholder="Enter code" size="6" required>
-          <button id="p3join">Join</button>
-        </div></td>
+        <td>
+          <div>
+            Player 3: <input type="text" name="jname" id="p3Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i3room" placeholder="Enter code" size="6" required>
+            <button id="p3Join">Join</button>
+          </div>
+        </td>
         <td><button id="G8" class="grid LtBlue"><img src="" id="iG8" /></button></td>
         <td><button id="G9" class="grid Red"><img src="img/playingPieceRed.png" id="iG9" /></button></td>
         <td><button id="GA" class="grid LtBlue"><img src="" id="iGA" /></button></td>
       </tr>
       <tr>
-        <td><div>
-          Player 4: <input type="text" name="jname" id="nameJoin" placeholder="Enter your name" size="15" required>
-          Code: <input type="text" name="room" id="room" placeholder="Enter code" size="6" required>
-          <button id="join">Join</button>
-        </div></td>
+        <td>
+          <div>
+            Player 4: <input type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i4room" placeholder="Enter code" size="6" required>
+            <button id="p4Join">Join</button>
+          </div>
+        </td>
         <td><button id="H8" class="grid LtBlue"><img src="" id="iH8" /></button></td>
         <td><button id="H9" class="grid Red"><img src="img/playingPieceRed.png" id="iH9" /></button></td>
         <td><button id="HA" class="grid LtBlue"><img src="" id="iHA" /></button></td>
@@ -239,6 +252,9 @@
   </table>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+  <script src="config.js"></script>
+  <script src="client.js"></script>
   <script src="test.js"></script>
   <script src="game.js"></script>
 </body>
