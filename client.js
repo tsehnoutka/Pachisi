@@ -326,9 +326,8 @@ socket.on('player2', function(data) {
 
 //  ***************     Recieved Turn     ***************
 socket.on('turn', function(data) {
-  console.log("Server responded from turn - id: " + data.dID + " MoveType: " + data.dMoveType);
-  let tim = data.dMoveType;
-  makeMove(data.dID, tim, false);
+  console.log("Server responded from turn - id: " + data.id + " MoveType: " + data.dMoveType);
+  makeMove(data.id, data.dMoveType, false);
   if (displayMessage)
     PopUpMessage(outputMessage);
   displayMessage = false;
