@@ -84,5 +84,17 @@ table {
   padding: 10px;
   border: 1px solid black;
 }
-
-/
+.player1 {
+  color: #FF0000;
+}
+.player2 {
+  color: blue;
+}
+.player3 {
+  color: Lime;
+  background-color: black;
+}
+.player4 {
+  color: Yellow;
+  background-color: black;
+}

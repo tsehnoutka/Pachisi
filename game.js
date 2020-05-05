@@ -8,16 +8,6 @@
  - put all the interface stuff in game, not client.  Client.js should just have sed and receive functions
 */
 
-const NAME1JOIN = document.querySelector("#p1Name");
-const NAME2JOIN = document.querySelector("#p2Name");
-const NAME3JOIN = document.querySelector("#p3Name");
-const NAME4JOIN = document.querySelector("#p4Name");
-const ROOM2 = document.querySelector("#i2room");
-const ROOM3 = document.querySelector("#i3room");
-const ROOM4 = document.querySelector("#i4room");
-const BTN_P2JOIN = document.querySelector("#p2Join");
-const BTN_P3JOIN = document.querySelector("#p3Join");
-const BTN_P4JOIN = document.querySelector("#p4Join");
 const HOME_RED = document.getElementById("iRedHome");
 const HOME_GREEN = document.getElementById("iGreenHome");
 const HOME_BLUE = document.getElementById("iBlueHome");

@@ -4,18 +4,32 @@
 //                           Socket stuff
 //***************************************************************
 
+const NAME1JOIN = document.querySelector("#p1Name");
+const NAME2JOIN = document.querySelector("#p2Name");
+const NAME3JOIN = document.querySelector("#p3Name");
+const NAME4JOIN = document.querySelector("#p4Name");
+const ROOM2 = document.querySelector("#i2room");
+const ROOM3 = document.querySelector("#i3room");
+const ROOM4 = document.querySelector("#i4room");
+const BTN_P2JOIN = document.querySelector("#p2Join");
+const BTN_P3JOIN = document.querySelector("#p3Join");
+const BTN_P4JOIN = document.querySelector("#p4Join");
+
+const TXT_INPUT = $("#input");
 const STATUS = $('#status');
 const CONTENT = $('#content');
+
 const NEW = document.querySelector("#new");
 const NAMENEW = document.querySelector("#nameNew");
 const JOIN = document.querySelector("#join");
 const NAMEJOIN = document.querySelector("#nameJoin");
 const ROOM = document.querySelector("#room");
+
 const CB_PLAYSOUND = document.querySelector("#playSound");
 const MSG_SOUND = new Audio("./sounds/MsgNudge.wav");
 const PLAY_SOUND = new Audio("./sounds/Notify.wav");
 const BONK_SOUND = new Audio("./sounds/bonk.wav");
-const TXT_INPUT = $("#input");
+
 
 var code = -1;
 var name = "";
