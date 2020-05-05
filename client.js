@@ -81,7 +81,13 @@ jQuery(document).ready(function($) {
       alert('Please enter your name.');
       return;
     }
-    numOfPlayers = prompt("Enter the  number of players", "4");
+    if (GAME_TYPE == GT_PAGADE) {
+      numOfPlayers = "NaN";
+      while (isNaN(numOfPlayers)) {
+        numOfPlayers = parseInt(prompt("Enter the  number of players", "4"));
+      }
+    }
+    initializeBoard();
     determineWhoGoesFirst();
     socket.emit('createGame', {
       name: name,
