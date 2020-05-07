@@ -218,6 +218,14 @@ String.prototype.escape = function() {
 };
 
 //  ***************     Send message     ***************
+function sendMessage(msg){
+  socket.emit('message', {
+    name: name,
+    text: msg,
+    color: color,
+    room: code
+  });
+}
 TXT_INPUT.keydown(function(e) {
   if (e.keyCode === 13) {
     console.log("Messsage entered");
@@ -227,12 +235,8 @@ TXT_INPUT.keydown(function(e) {
       return;
     }
     // send the message as an ordinary text
-    socket.emit('message', {
-      name: name,
-      text: msg,
-      color: color,
-      room: code
-    });
+    sendMessage(msg);
+
     $(this).val('');
     // disable the TXT_INPUT field to make the user wait until server
     // sends back response
