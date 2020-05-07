@@ -24,12 +24,12 @@
           <table>
             <tr>
               <td style="width: 353px">
-			  <img id="d1" class="dice" src="img/woodgrainDot1.png" width="335" /></td>
+                <img id="d1" class="dice" src="img/woodgrainDot1.png" width="335" /></td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td style="width: 353px">
-			  <img id="d2" class="dice" src="img/woodgrainDot1.png" width="333" /></td>
+                <img id="d2" class="dice" src="img/woodgrainDot1.png" width="333" /></td>
               <td>&nbsp;</td>
             </tr>
 
@@ -93,7 +93,9 @@
         <td><button id="7A" class="grid LtBlue"><img src="" id="i7A" /></button></td>
       </tr>
       <tr>
-        <td style="height: 45px"></td>
+        <td rowspan="4">
+          <div id="content" class="content" style="width: 458px; height: 136px;"></div>
+        </td>
         <td style="height: 45px"><button id="80" class="grid LtBlue"><img src="" id="i80" /></button></td>
         <td style="height: 45px"><button id="81" class="grid LtBlue"><img src="" id="i81" /></button></td>
         <td style="height: 45px"><button id="82" class="grid LtBlue"><img src="" id="i82" /></button></td>
@@ -118,21 +120,20 @@
               <td><button id="GreenStart" class="grid StartColor"><img src="img/playingPieceGreen.png" id="iGreenStart" /></button></td>
 
             </tr>
-          </table </td>
+          </table>
         <td style="height: 45px"><button id="8B" class="grid LtBlue"><img src="" id="i8B" /></button></td>
         <td style="height: 45px"><button id="8C" class="grid LtBlue"><img src="" id="i8C" /></button></td>
         <td style="height: 45px"><button id="8D" class="grid LtBlue"><img src="" id="i8D" /></button></td>
         <td style="height: 45px"><button id="8E" class="grid LtBlue"><img src="" id="i8E" /></button></td>
-        <td style="height: 45px"><button id="8F" class="grid LtBlue"><img src="img/playingPieceGreen2.png" id="i8F" /></button></td>
+        <td style="height: 45px"><button id="8F" class="grid LtBlue"><img src="" id="i8F" /></button></td>
         <td style="height: 45px"><button id="8G" class="grid LtBlue"><img src="" id="i8G" /></button></td>
         <td style="height: 45px"><button id="8H" class="grid LtBlue"><img src="" id="i8H" /></button></td>
         <td style="height: 45px"><button id="8I" class="grid LtBlue"><img src="" id="i8I" /></button></td>
       </tr>
       <tr>
-        <td>&nbsp;</td>
         <td><button id="90" class="grid LtBlue"><img src="" id="i90" /></button></td>
-        <td><button id="91" class="grid Yellow"><img src="img/playingPieceYellow.png" id="i91" /></button></td>
-        <td><button id="92" class="grid Yellow"><img src="img/playingPieceYellow.png" id="i92" /></button></td>
+        <td><button id="91" class="grid Yellow"><img src="" id="i91" /></button></td>
+        <td><button id="92" class="grid Yellow"><img src="" id="i92" /></button></td>
         <td><button id="93" class="grid Yellow"><img src="" id="i93" /></button></td>
         <td><button id="94" class="grid Yellow"><img src="" id="i94" /></button></td>
         <td><button id="95" class="grid Yellow"><img src="" id="i95" /></button></td>
@@ -143,16 +144,15 @@
         <td><button id="9D" class="grid Green"><img src="" id="i9D" /></button></td>
         <td><button id="9E" class="grid Green"><img src="" id="i9E" /></button></td>
         <td><button id="9F" class="grid Green"><img src="" id="i9F" /></button></td>
-        <td><button id="9G" class="grid Green"><img src="img/playingPieceGreen.png" id="i9G" /></button></td>
-        <td><button id="9H" class="grid Green"><img src="img/playingPieceGreen.png" id="i9H" /></button></td>
+        <td><button id="9G" class="grid Green"><img src="" id="i9G" /></button></td>
+        <td><button id="9H" class="grid Green"><img src="" id="i9H" /></button></td>
         <td><button id="9I" class="grid LtBlue"><img src="" id="i9I" /></button></td>
       </tr>
       <tr>
-        <td></td>
         <td><button id="A0" class="grid LtBlue"><img src="" id="iA0" /></button></td>
         <td><button id="A1" class="grid LtBlue"><img src="" id="iA1" /></button></td>
         <td><button id="A2" class="grid LtBlue"><img src="" id="iA2" /></button></td>
-        <td><button id="A3" class="grid LtBlue"><img src="img/playingPieceYellow2.png" id="iA3" /></button></td>
+        <td><button id="A3" class="grid LtBlue"><img src="" id="iA3" /></button></td>
         <td><button id="A4" class="grid LtBlue"><img src="" id="iA4" /></button></td>
         <td><button id="A5" class="grid LtBlue"><img src="" id="iA5" /></button></td>
         <td><button id="A6" class="grid LtBlue"><img src="" id="iA6" /></button></td>
@@ -167,7 +167,6 @@
         <td><button id="AI" class="grid LtBlue"><img src="" id="iAI" /></button></td>
       </tr>
       <tr>
-        <td></td>
         <td id="RedHome" colspan="8" rowspan="8" align="center" valign="center"><img src="img/RedHome.png" id="iRedHome" /></td>
         <td><button id="B8" class="grid LtBlue"><img src="" id="iB8" /></button></td>
         <td><button id="B9" class="grid Red"><img src="" id="iB9" /></button></td>
@@ -175,43 +174,74 @@
         <td id="GreenHome" colspan="8" rowspan="8" align="center" valign="center"><img src="img/GreenHome.png" id="iGreenHome" /></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <span id="status0">Message:</span></td>
         <td><button id="C8" class="grid LtBlue"><img src="" id="iC8" /></button></td>
         <td><button id="C9" class="grid Red"><img src="" id="iC9" /></button></td>
         <td><button id="CA" class="grid LtBlue"><img src="" id="iCA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div class="auto-style3">
+            <span id="status">&nbsp;</span><input type="text" id="input" class="input" disabled style="width: 312px" />
+            <input type="checkbox" id="playSound" checked>play sound</input>
+            <br>
+          </div>
+          <div>
+        </td>
         <td><button id="D8" class="grid LtBlue"><img src="" id="iD8" /></button></td>
         <td><button id="D9" class="grid Red"><img src="" id="iD9" /></button></td>
         <td><button id="DA" class="grid LtBlue"><img src="" id="iDA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div>
+            <span class="player1">Player 1</span>: <input type="text" name="jname" id="p1Name" placeholder="Enter your name" size="15" required>
+            <button id="new">Create</button>
+          </div>
+        </td>
         <td><button id="E8" class="grid LtBlue"><img src="" id="iE8" /></button></td>
         <td><button id="E9" class="grid Red"><img src="" id="iE9" /></button></td>
         <td><button id="EA" class="grid LtBlue"><img src="" id="iEA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div>
+            <span class="player2">Player 2</span>: <input type="text" name="jname" id="p2Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i2room" placeholder="Enter code" size="6" required>
+            <button id="p2Join">Join</button>
+          </div>
+        </td>
         <td><button id="F8" class="grid LtBlue"><img src="" id="iF8" /></button></td>
         <td><button id="F9" class="grid Red"><img src="" id="iF9" /></button></td>
         <td><button id="FA" class="grid LtBlue"><img src="img/playingPieceRed2.png" id="iFA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div>
+            <span class="player3">Player 3</span>: <input type="text" name="jname" id="p3Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i3room" placeholder="Enter code" size="6" required>
+            <button id="p3Join">Join</button>
+          </div>
+        </td>
         <td><button id="G8" class="grid LtBlue"><img src="" id="iG8" /></button></td>
         <td><button id="G9" class="grid Red"><img src="img/playingPieceRed.png" id="iG9" /></button></td>
         <td><button id="GA" class="grid LtBlue"><img src="" id="iGA" /></button></td>
       </tr>
       <tr>
-        <td></td>
+        <td>
+          <div>
+            <span class="player4">Player 4</span>: <input type="text" name="jname" id="p4Name" placeholder="Enter your name" size="15" required>
+            Code: <input type="text" name="room" id="i4room" placeholder="Enter code" size="6" required>
+            <button id="p4Join">Join</button>
+          </div>
+        </td>
         <td><button id="H8" class="grid LtBlue"><img src="" id="iH8" /></button></td>
         <td><button id="H9" class="grid Red"><img src="img/playingPieceRed.png" id="iH9" /></button></td>
         <td><button id="HA" class="grid LtBlue"><img src="" id="iHA" /></button></td>
       </tr>
       <tr>
-        <td><button id="playagain" class="button" onclick="Reset()" value="Play Again">Reset</button></td>
+        <td><button id="playagain" class="button" onclick="onPlayAgain()" value="Play Again">Reset</button></td>
         <td><button id="I8" class="grid LtBlue"><img src="" id="iI8" /></button></td>
         <td><button id="I9" class="grid LtBlue"><img src="" id="iI9" /></button></td>
         <td><button id="IA" class="grid LtBlue"><img src="" id="iIA" /></button></td>
@@ -222,6 +252,9 @@
   </table>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+  <script src="config.js"></script>
+  <script src="client.js"></script>
   <script src="test.js"></script>
   <script src="game.js"></script>
 </body>
